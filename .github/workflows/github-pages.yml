@@ -1,0 +1,47 @@
+name: Deploy Static Files to GitHub Pages
+
+on:
+  repository_dispatch:
+    types: [Deploy Static Files to Github Pages]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          repository: Kee7702/vdb-private
+          token: ${{ secrets.TOKEN }}
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+  clean:
+    if: always()
+    runs-on: ubuntu-latest
+    needs: deploy
+    steps:
+      - name: Delete Artifact
+        uses: geekyeggo/delete-artifact@v5.1.0
+        if: always()
+        with:
+          name: github-pages
