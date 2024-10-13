@@ -23,7 +23,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          repository: Kee7702/vdb-private
+          repository: Kee7702/kp-static
           token: ${{ secrets.TOKEN }}
       - name: Delete .git
         run: rm -rf .git
