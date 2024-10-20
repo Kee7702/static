@@ -5,6 +5,7 @@ on:
     types: [Deploy Static Files to Github Pages]
 
 permissions:
+  actions: write
   contents: read
   pages: write
   id-token: write
